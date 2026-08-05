@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FANEN COIN - L1 Native - Fountain</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>₣ FANEN COIN - L1 Native - Fountain</title>
 <style>
 body{background:#000;color:#0f0;font-family:monospace;padding:10px;margin:0}
 h1{color:#ff0;text-align:center;font-size:19px;margin:6px;text-shadow:0 0 8px #ff0}
@@ -14,7 +14,7 @@ input{width:92%;padding:8px;background:#000;color:#ff0;border:1px solid #ff0;bor
 #ws{color:#0ff;font-size:11px;text-align:center}
 .holder{font-size:10px;color:#0f0}
 </style></head><body>
-<h1>💰 FANEN COIN <span class="coin-badge">L1 COIN</span><br>Fountain Wallet V14 - WS LIVE</h1>
+<h1>₣ FANEN COIN <span class="coin-badge">L1 COIN</span><br>Fountain Wallet V14 - WS LIVE</h1>
 <div id="ws">🔌 Connecting COIN L1...</div>
 <div class="card">
 <div class="supply"><span class="coin-badge">COIN</span> Supply: <span id="supply">20999988.6</span> FANEN</div>
@@ -23,11 +23,11 @@ input{width:92%;padding:8px;background:#000;color:#ff0;border:1px solid #ff0;bor
 </div>
 
 <div class="card" style="border-color:#ff0">
-<h3 style="margin:4px;color:#ff0">💸 Send FANEN COIN - L1 Native Transfer</h3>
+<h3 style="margin:4px;color:#ff0">₣ Send ₣ FANEN COIN - L1 Native Transfer</h3>
 <input id="from" placeholder="From (e.g. Founder, DHN_1)" value="Founder">
 <input id="to" placeholder="To address / name">
-<input id="amt" type="number" placeholder="Amount FANEN COIN" step="0.000001">
-<button class="btn" onclick="sendCoin()" style="width:96%;background:#ff0">💰 SEND FANEN COIN - L1</button>
+<input id="amt" type="number" placeholder="Amount ₣ FANEN COIN" step="0.000001">
+<button class="btn" onclick="sendCoin()" style="width:96%;background:#ff0"> SEND  ₣ FANEN COIN - L1</button>
 <div id="txmsg" style="text-align:center;color:#ff0;min-height:18px;margin-top:4px"></div>
 </div>
 
@@ -41,7 +41,7 @@ input{width:92%;padding:8px;background:#000;color:#ff0;border:1px solid #ff0;bor
 </div>
 
 <div class="card">
-<h3 style="margin:4px">📦 L1 Blocks - FANEN COIN Ledger</h3>
+<h3 style="margin:4px">  L1 Blocks - ₣ FANEN COIN Ledger</h3>
 <div class="log" id="log">Waiting CLOUD9 COIN L1...</div>
 </div>
 
@@ -49,17 +49,17 @@ input{width:92%;padding:8px;background:#000;color:#ff0;border:1px solid #ff0;bor
 let ws,b=43,s=20999988.6,balances={};
 function connect(){
  ws=new WebSocket('ws://'+location.hostname+':8001');
- ws.onopen=()=>{document.getElementById('ws').innerHTML='✅ FANEN COIN L1 CONNECTED 8001 - NATIVE COIN LIVE!';};
+ ws.onopen=()=>{document.getElementById('ws').innerHTML='✔ ₣ FANEN COIN L1 CONNECTED 8001 - NATIVE COIN LIVE!';};
  ws.onmessage=(e)=>{
   let d=JSON.parse(e.data);
   if(d.balances){balances=d.balances; updateHolders();}
   if(d.block){b=d.block; s=d.supply; document.getElementById('block').textContent=b; document.getElementById('supply').textContent=s;}
   let l=document.getElementById('log');
   if(d.msg) l.innerHTML = d.msg + '<br>' + l.innerHTML;
-  if(d.type==='coin_tx'){ document.getElementById('txmsg').innerHTML = d.msg; l.innerHTML = '✅ '+d.msg + '<br>' + l.innerHTML; }
-  if(d.type==='error'){ document.getElementById('txmsg').innerHTML='❌ '+d.msg; }
+  if(d.type==='coin_tx'){ document.getElementById('txmsg').innerHTML = d.msg; l.innerHTML = '✔ '+d.msg + '<br>' + l.innerHTML; }
+  if(d.type==='error'){ document.getElementById('txmsg').innerHTML='X '+d.msg; }
  };
- ws.onclose=()=>{document.getElementById('ws').innerHTML='❌ COIN L1 Disconnected - Reconnect...'; setTimeout(connect,2000);};
+ ws.onclose=()=>{document.getElementById('ws').innerHTML='X COIN L1 Disconnected - Reconnect...'; setTimeout(connect,2000);};
 }
 connect();
 function updateHolders(){
@@ -71,13 +71,13 @@ function sendCoin(){
  let f=document.getElementById('from').value.trim();
  let t=document.getElementById('to').value.trim();
  let a=document.getElementById('amt').value.trim();
- if(!t||!a) {document.getElementById('txmsg').innerHTML='❌ Enter to + amount'; return;}
+ if(!t||!a) {document.getElementById('txmsg').innerHTML='X Enter to + amount'; return;}
  ws.send(JSON.stringify({action:"transfer",from:f,to:t,amount:a}));
- document.getElementById('txmsg').innerHTML='⏳ Sending '+a+' FANEN COIN '+f+' -> '+t+'...';
+ document.getElementById('txmsg').innerHTML='⏳ Sending '+a+' ₣ FANEN COIN '+f+' -> '+t+'...';
 }
 function play(n){
  let win=Math.random()<0.5;
- document.getElementById('game').innerHTML=n+' BOX '+(win?'💥 WIN +'+n*10+' FANEN COIN!':'❌ LOSE')+'<br>Block '+b;
+ document.getElementById('game').innerHTML=n+' BOX '+(win?'💥 WIN +'+n*10+' ₣ FANEN COIN!':'X LOSE')+'<br>Block '+b;
  if(win && ws.readyState===1){
    let f=document.getElementById('from').value||'Founder';
    ws.send(JSON.stringify({action:"transfer",from:"Fountain",to:f,amount:n*10}));
