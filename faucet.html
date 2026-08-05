@@ -1,43 +1,40 @@
 <!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FANEN COIN Faucet - LIVE WORLD</title>
+<title>FANEN COIN - WORLD FAUCET</title>
 <style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;text-align:center}
-input{padding:12px;width:85%;background:#111;color:#ff0;border:1px solid #ff0;border-radius:10px;margin:10px}
-button{background:#ff0;color:#000;padding:14px 24px;border:none;border-radius:12px;font-weight:bold}
-.card{background:#111;border:1px solid #333;border-radius:10px;padding:10px;margin:10px;text-align:left;font-size:12px}
+input{padding:14px;width:90%;background:#111;color:#ff0;border:1px solid #ff0;border-radius:10px;margin:10px;font-size:16px}
+button{background:#ff0;color:#000;padding:14px 28px;border:none;border-radius:12px;font-weight:bold;font-size:18px;box-shadow:0 0 15px #ff0}
+.card{background:#111;border:1px solid #333;border-radius:12px;padding:12px;margin:12px;text-align:left}
+h1{color:#ff0;text-shadow:0 0 10px #ff0}
 </style></head><body>
-<h1 style="color:#ff0">FANEN COIN Faucet - WORLD LIVE</h1>
-<p>Block <span id="h">405</span> | Supply <span id="s">20999984</span> | Holders <span id="ho">24</span></p>
-<input id="addr" placeholder="Your name">
-<br><button onclick="claim()">CLAIM 100 FANEN COIN</button>
-<div id="msg" style="margin:15px;color:#0ff">Loading chain...</div>
-<div class="card" id="log"></div>
+<h1>FANEN COIN FAUCET</h1>
+<h3 style="color:#0ff">L1_NATIVE_COIN - NOT TOKEN - Block <span id="h">-</span></h3>
+<p>Supply: <span id="s">-</span> | Holders: <span id="ho">-</span></p>
+<input id="addr" placeholder="Enter your name to claim 100 FANEN">
+<br><button onclick="claim()">CLAIM 100 FANEN COIN WORLDWIDE</button>
+<div id="msg" style="margin:15px;color:#0ff;font-size:16px">Connecting to world chain...</div>
+<div class="card" id="log">Loading...</div>
 <script>
 async function loadLedger(){
   try{
-    let r=await fetch('fanen_ledger.json?t='+Date.now());
+    let r=await fetch('/api/ledger?t='+Date.now());
     let j=await r.json();
     document.getElementById('h').textContent=j.height;
     document.getElementById('s').textContent=Object.values(j.balances).reduce((a,b)=>a+b,0).toFixed(2);
     document.getElementById('ho').textContent=Object.keys(j.balances).length;
-    let l=document.getElementById('log');
-    l.innerHTML=Object.entries(j.balances).map(([k,v])=>k+': <b style=color:#ff0>'+v+'</b>').join('<br>');
-    document.getElementById('msg').textContent='LIVE - Ready to claim';
-  }catch(e){document.getElementById('msg').textContent='Chain loading... '+e}
+    document.getElementById('log').innerHTML=Object.entries(j.balances).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k}: <b style=color:#ff0>${v} FANEN</b>`).join('<br>');
+    document.getElementById('msg').textContent='WORLD LIVE - Ready to claim!';
+  }catch(e){document.getElementById('msg').textContent='Error: '+e}
 }
 async function claim(){
   let to=document.getElementById('addr').value.trim();
   if(!to)return alert('Enter name');
-  document.getElementById('msg').textContent='Claiming... (demo mode - local claim via Termux)';
-  // For internet version, we will add API later - for now shows how to claim locally
-  // Local WS claim
-  let proto=location.protocol==='https:'?'wss://':'ws://';
-  let wsurl=proto+location.hostname+':8001';
+  document.getElementById('msg').textContent='Claiming 100 FANEN for '+to+'...';
   try{
-    let ws=new WebSocket(wsurl);
-    ws.onopen=()=>ws.send(JSON.stringify({action:"transfer",from:"Founder",to:to,amount:100}));
-    ws.onmessage=()=>{loadLedger(); document.getElementById('msg').textContent='SENT 100 to '+to; ws.close();}
-    ws.onerror=()=>{document.getElementById('msg').textContent='On Render, claim via API coming - use local Termux for now: ws send transfer Founder->'+to;}
-  }catch(e){document.getElementById('msg').textContent=e}
+    let r=await fetch('/api/claim?to='+encodeURIComponent(to));
+    let j=await r.json();
+    if(j.ok){document.getElementById('msg').innerHTML='SUCCESS! Sent 100 FANEN to '+to+' at Block '+j.block+'!'; loadLedger();}
+    else{document.getElementById('msg').textContent='Already claimed: '+JSON.stringify(j)}
+  }catch(e){document.getElementById('msg').textContent='Claim failed: '+e}
 }
 loadLedger(); setInterval(loadLedger,5000);
 </script>
