@@ -1,8 +1,8 @@
 {
-  "height": 77,
-  "supply": 20999988.26,
+  "height": 167,
+  "supply": 20999987.36,
   "balances": {
-    "Founder": 20999988.6,
+    "Founder": 20998988.6,
     "Fountain": 0,
     "DHN_1": 1000.0,
     "DHN_2": 1000.0,
@@ -24,7 +24,8 @@
     "DHN_18": 1000.0,
     "DHN_19": 1000.0,
     "DHN_20": 1000.0,
-    "DHN_21": 1000.0
+    "DHN_21": 1000.0,
+    "Fa Nen Ter": 1000.0
   },
   "coin": "FANEN",
   "type": "L1_NATIVE_COIN"
