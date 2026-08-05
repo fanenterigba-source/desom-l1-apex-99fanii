@@ -1,0 +1,54 @@
+... I will generate explorer showing your 48623a1 tx forever
+cat > explorer.html << 'HTML'
+... I will generate explorer showing your 48623a1 tx forever
+cat > explorer.html << 'HTML'
+... I will generate explorer showing your 48623a1 tx forever
+cat > explorer.html << 'HTML'
+<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FANEN COIN Explorer - Block 156</title>
+<style>
+body{background:#000;color:#0f0;font-family:monospace;padding:10px}
+h1{color:#ff0;text-align:center}
+.card{background:#111;border:1px solid #ff0;border-radius:10px;padding:10px;margin:10px 0}
+.tx{border-bottom:1px dashed #333;padding:5px;font-size:12px}
+.hash{color:#0ff;font-size:10px}
+.badge{background:#ff0;color:#000;padding:2px 6px;border-radius:8px;font-weight:bold}
+</style></head><body>
+<h1>💰 FANEN COIN Explorer <span class="badge">L1_NATIVE</span></h1>
+<div class="card">
+<div>Height: <span id="height">156</span> | Supply: <span id="supply">20999987.47</span> FANEN COIN</div>
+<div>Type: <span style="color:#ff0">L1_NATIVE_COIN - NOT TOKEN</span></div>
+<div>GitHub: desom-l1-apex-99fanii | Commit: 48623a1</div>
+</div>
+<div class="card">
+<h3>🔥 Historic TX - Block 107</h3>
+<div class="tx">💸 <b>Founder -> Fa Nen Ter : 1000.0 FANEN COIN</b><br>
+<span class="hash">Commit: 48623a1 | 2 wallets WS LIVE | 2026 Block 107</span><br>
+Status: <span style="color:#0f0">CONFIRMED IMMORTALIZED</span></div>
+</div>
+<div class="card">
+<h3>👥 Holders (24)</h3>
+<div id="holders">Loading fanen_ledger.json...</div>
+</div>
+<div class="card">
+<h3>⛓️ Live Blocks</h3>
+<div id="blocks"></div>
+</div>
+<script>
+fetch('fanen_ledger.json').then(r=>r.json()).then(j=>{
+ document.getElementById('height').textContent=j.height;
+ document.getElementById('supply').textContent=j.supply;
+ let h=document.getElementById('holders');
+ h.innerHTML=Object.entries(j.balances).map(([k,v])=>`${k}: <b style="color:#ff0">${v}</b> FANEN`).join('<br>');
+});
+let ws=new WebSocket('ws://'+location.hostname+':8001');
+ws.onmessage=e=>{
+ let d=JSON.parse(e.data);
+ if(d.type==='block'||d.type==='coin_tx'){
+   let b=document.getElementById('blocks');
+   b.innerHTML=`[${d.block||'TX'}] ${d.msg}<br>`+b.innerHTML;
+ }
+};
+</script>
+</body></html>

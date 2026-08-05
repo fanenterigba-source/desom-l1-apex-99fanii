@@ -1,0 +1,22 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FANEN Faucet</title>
+<style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;text-align:center}
+input{padding:10px;width:80%;background:#000;color:#ff0;border:1px solid #ff0;border-radius:8px;margin:10px}
+button{background:#ff0;color:#000;padding:12px 20px;border:none;border-radius:10px;font-weight:bold;font-size:16px}
+</style></head><body>
+<h1>🚰 FANEN COIN Faucet</h1>
+<p>Claim 100 FANEN COIN L1 - COIN NOT TOKEN</p>
+<input id="addr" placeholder="Your name / address (e.g. Chidi)">
+<br><button onclick="claim()">💧 CLAIM 100 FANEN COIN</button>
+<div id="msg" style="margin:15px;color:#ff0"></div>
+<script>
+let ws=new WebSocket('ws://'+location.hostname+':8001');
+ws.onopen=()=>document.getElementById('msg').innerHTML='✅ Faucet connected to Block 156';
+function claim(){
+ let to=document.getElementById('addr').value.trim();
+ if(!to)return alert('Enter name');
+ ws.send(JSON.stringify({action:"transfer",from:"Founder",to:to,amount:100}));
+ document.getElementById('msg').innerHTML='💸 Sending 100 FANEN COIN to '+to+'... Check explorer!';
+}
+</script>
+</body></html>
