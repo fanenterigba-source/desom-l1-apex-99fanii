@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fanii Drop $1=99 Fanii</title><style>body{background:#000;color:#0f0;font-family:monospace;text-align:center}.drop{animation:drop 2s linear}@keyframes drop{from{transform:translateY(-100px)}to{transform:translateY(100vh)}}button{padding:12px;margin:5px;background:#111;color:#0f0;border:1px solid #0f0}</style></head><body>
+<h2>Fanii Drop 100% Direct - $1=99 Fanii - 1 FANEN=495k=$5000</h2>
+<div>Your Fanii: <span id="bal">10000</span> = $<span id="usd">101.01</span></div>
+<button onclick="recharge()">Recharge $1=99 Fanii PalmPay/USDT</button>
+<button onclick="withdraw()">Withdraw 99 Fanii=$1</button>
+<button onclick="startRain()">Start Fanii Rain</button>
+<div id="rain"></div>
+<script>
+let bal=10000;
+function upd(){document.getElementById('bal').innerText=bal;document.getElementById('usd').innerText=(bal/99).toFixed(2);}
+function recharge(){let d=parseInt(prompt('How many $ to recharge? $1=99 Fanii'));if(d>0){bal+=d*99;upd();alert(`+${d*99} Fanii = $${d} - 100% direct - PalmPay/USDT`);}}
+function withdraw(){let f=parseInt(prompt(`Withdraw Fanii - You have ${bal} = $${(bal/99).toFixed(2)} - 99 Fanii=$1`));if(f>0&&f<=bal){bal-=f;upd();alert(`Withdraw ${f} Fanii = $${(f/99).toFixed(2)} sent to PalmPay/USDT - 0% fee`);}}
+function startRain(){setInterval(()=>{let e=document.createElement('div');e.className='drop';e.style.position='fixed';e.style.left=Math.random()*90+'%';e.innerText='🎁 '+[50,99,495,495000][Math.floor(Math.random()*4)]+' Fanii';document.getElementById('rain').appendChild(e);setTimeout(()=>e.remove(),2000);let win=Math.floor(Math.random()*99)+50;bal+=win;upd();},1000);}
+upd();
+</script>
+</body></html>

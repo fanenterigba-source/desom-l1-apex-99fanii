@@ -1,0 +1,35 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live 9 Boxes $1=99 Fanii</title><style>body{background:#000;color:#fff;margin:0;font-family:sans-serif}.live{width:100%;height:60vh;background:#111;display:flex;flex-wrap:wrap}.box{border:2px solid #0f0;flex:1 1 30%;min-height:30%;display:flex;align-items:center;justify-content:center;flex-direction:column}.host{border-color:#ff0}button{margin:3px;padding:10px;background:#222;color:#0f0;border:1px solid #0f0}</style></head><body>
+<h3 style="color:#0f0;text-align:center">Cloud9 Live Box Game - $1=99 Fanii - 9 Boxes PK</h3>
+<div style="text-align:center"><button onclick="setBoxes(1)">1 Solo</button><button onclick="setBoxes(2)">2 PK</button><button onclick="setBoxes(4)">4 Boxes</button><button onclick="setBoxes(9)">9 Battle</button><button onclick="startPK()" style="background:#f00">Start PK 5min</button></div>
+<div id="live" class="live"></div><div id="pk" style="color:#ff0;text-align:center;padding:10px">PK Ready $1=99 Fanii Most Fanii wins</div>
+<div style="text-align:center"><button onclick="sendGift('Rose',50)">Rose 50 $0.51</button><button onclick="sendGift('G.O.A.T.',495000)">G.O.A.T. 495k $5000=1 FANEN</button></div>
+<div id="log" style="color:#0ff;padding:10px"></div>
+<script>
+let boxes=1,scores={};
+function setBoxes(n){
+ boxes=n;scores={};
+ let l=document.getElementById('live');l.innerHTML='';
+ for(let i=0;i<n;i++){
+  let b=document.createElement('div');b.className='box'+(i==0?' host':'');
+  b.innerHTML=`Box ${i+1} ${i==0?'(Host)':''}<br><span id='score${i}'>0 Fanii $0</span>`;
+  l.appendChild(b);scores[i]=0;
+ }
+ document.getElementById('log').innerHTML=n+' Boxes Live - Like TikTok format - $1=99 Fanii';
+}
+function sendGift(name,f){
+ let t=Math.floor(Math.random()*boxes);
+ scores[t]+=f;
+ document.getElementById('score'+t).innerText=scores[t]+' Fanii $'+(scores[t]/99).toFixed(2);
+ document.getElementById('log').innerHTML+=`<br>🎁 ${name} ${f} Fanii $${(f/99).toFixed(2)} to Box ${t+1}`;
+}
+function startPK(){
+ let e=Date.now()+300000;
+ let iv=setInterval(()=>{
+  let left=Math.floor((e-Date.now())/1000);
+  if(left<=0){clearInterval(iv);let w=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);document.getElementById('pk').innerText=`🏆 WIN Box ${parseInt(w)+1} Wins ${scores[w]} Fanii $${(scores[w]/99).toFixed(2)}! Fanii Drop!`;return;}
+  document.getElementById('pk').innerText=`PK LIVE ${left}s - Scores ${JSON.stringify(scores)} - $1=99 Fanii`;
+ },1000);
+}
+setBoxes(1);
+</script>
+</body></html>
