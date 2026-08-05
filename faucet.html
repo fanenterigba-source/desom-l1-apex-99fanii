@@ -1,28 +1,44 @@
 <!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FANEN Faucet - LIVE</title>
+<title>FANEN COIN Faucet - LIVE WORLD</title>
 <style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;text-align:center}
-input{padding:12px;width:85%;background:#111;color:#ff0;border:1px solid #ff0;border-radius:10px;margin:10px;font-size:15px}
-button{background:#ff0;color:#000;padding:14px 24px;border:none;border-radius:12px;font-weight:bold;font-size:17px;box-shadow:0 0 10px #ff0}
-.card{background:#111;border:1px solid #333;border-radius:10px;padding:10px;margin:10px}
+input{padding:12px;width:85%;background:#111;color:#ff0;border:1px solid #ff0;border-radius:10px;margin:10px}
+button{background:#ff0;color:#000;padding:14px 24px;border:none;border-radius:12px;font-weight:bold}
+.card{background:#111;border:1px solid #333;border-radius:10px;padding:10px;margin:10px;text-align:left;font-size:12px}
 </style></head><body>
-<h1 style="color:#ff0">FANEN COIN Faucet</h1>
-<p>Claim 100 FANEN COIN L1 - COIN NOT TOKEN - Block 405+</p>
-<input id="addr" placeholder="Your name (e.g. Chidi)">
+<h1 style="color:#ff0">FANEN COIN Faucet - WORLD LIVE</h1>
+<p>Block <span id="h">405</span> | Supply <span id="s">20999984</span> | Holders <span id="ho">24</span></p>
+<input id="addr" placeholder="Your name">
 <br><button onclick="claim()">CLAIM 100 FANEN COIN</button>
-<div id="msg" style="margin:15px;color:#0ff">Connecting...</div>
-<div class="card" id="log" style="font-size:11px;height:120px;overflow:auto;text-align:left"></div>
+<div id="msg" style="margin:15px;color:#0ff">Loading chain...</div>
+<div class="card" id="log"></div>
 <script>
-let proto = location.protocol==='https:'?'wss://':'ws://';
-let ws = new WebSocket(proto+location.host.replace(':10000','')+':8001');
-try { ws = new WebSocket(proto+location.host+'/ws'); } catch(e){}
-ws.onopen=()=>document.getElementById('msg').innerHTML='CONNECTED - Live L1 - Ready to claim!';
-ws.onmessage=e=>{ try{let d=JSON.parse(e.data); let l=document.getElementById('log'); if(d.msg) l.innerHTML=d.msg+'<br>'+l.innerHTML;}catch(e){}};
-function claim(){
- let to=document.getElementById('addr').value.trim();
- if(!to)return alert('Enter name');
- ws.send(JSON.stringify({action:"transfer",from:"Founder",to:to,amount:100}));
- document.getElementById('msg').innerHTML='SENT 100 FANEN COIN to '+to+'! Check explorer!';
+async function loadLedger(){
+  try{
+    let r=await fetch('fanen_ledger.json?t='+Date.now());
+    let j=await r.json();
+    document.getElementById('h').textContent=j.height;
+    document.getElementById('s').textContent=Object.values(j.balances).reduce((a,b)=>a+b,0).toFixed(2);
+    document.getElementById('ho').textContent=Object.keys(j.balances).length;
+    let l=document.getElementById('log');
+    l.innerHTML=Object.entries(j.balances).map(([k,v])=>k+': <b style=color:#ff0>'+v+'</b>').join('<br>');
+    document.getElementById('msg').textContent='LIVE - Ready to claim';
+  }catch(e){document.getElementById('msg').textContent='Chain loading... '+e}
 }
-setTimeout(()=>{ if(ws.readyState!==1) document.getElementById('msg').innerHTML='LOCAL MODE: Run on localhost:8080/faucet.html for full WS'; },3000);
+async function claim(){
+  let to=document.getElementById('addr').value.trim();
+  if(!to)return alert('Enter name');
+  document.getElementById('msg').textContent='Claiming... (demo mode - local claim via Termux)';
+  // For internet version, we will add API later - for now shows how to claim locally
+  // Local WS claim
+  let proto=location.protocol==='https:'?'wss://':'ws://';
+  let wsurl=proto+location.hostname+':8001';
+  try{
+    let ws=new WebSocket(wsurl);
+    ws.onopen=()=>ws.send(JSON.stringify({action:"transfer",from:"Founder",to:to,amount:100}));
+    ws.onmessage=()=>{loadLedger(); document.getElementById('msg').textContent='SENT 100 to '+to; ws.close();}
+    ws.onerror=()=>{document.getElementById('msg').textContent='On Render, claim via API coming - use local Termux for now: ws send transfer Founder->'+to;}
+  }catch(e){document.getElementById('msg').textContent=e}
+}
+loadLedger(); setInterval(loadLedger,5000);
 </script>
 </body></html>
