@@ -1,52 +1,64 @@
 <!DOCTYPE html>
 <html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fountain Wallet - DeSoM V13.4</title>
+<title>Fountain Wallet - DeSoM V13.4 WS</title>
 <style>
-body{background:#000;color:#0f0;font-family:monospace;padding:15px}
-h1{color:#0ff;text-align:center}
-.card{background:#111;border:1px solid #0f0;border-radius:12px;padding:15px;margin:10px 0}
-.btn{background:#0f0;color:#000;border:none;padding:12px 20px;border-radius:8px;font-weight:bold;margin:5px;width:22%;font-size:16px}
-.supply{font-size:24px;color:#ff0;text-align:center}
-.log{height:200px;overflow:auto;background:#000;border:1px solid #333;padding:10px;font-size:12px}
+body{background:#000;color:#0f0;font-family:monospace;padding:12px;margin:0}
+h1{color:#0ff;text-align:center;font-size:20px;margin:8px}
+.card{background:#111;border:1px solid #0f0;border-radius:12px;padding:12px;margin:8px 0}
+.btn{background:#0f0;color:#000;border:none;padding:10px;border-radius:8px;font-weight:bold;margin:3px;width:23%;font-size:14px}
+.supply{font-size:22px;color:#ff0;text-align:center}
+.dot{height:10px;width:10px;background:#0f0;border-radius:50%;display:inline-block;animation:blink 1s infinite}
+@keyframes blink{0%{opacity:1}50%{opacity:0.2}}
+.log{height:180px;overflow:auto;background:#000;border:1px solid #333;padding:8px;font-size:11px}
+#ws{color:#0ff;font-size:11px;text-align:center}
 </style></head><body>
-<h1>💧 Fountain Wallet<br>DeSoM V13.4 LIVE</h1>
+<h1>💧 Fountain Wallet<br>DeSoM V13.4 <span class="dot"></span> WS LIVE</h1>
+<div id="ws">🔌 Connecting to CLOUD9 MATE 8001...</div>
 <div class="card">
 <div class="supply">Supply: <span id="supply">20999997.2</span> FANEN</div>
-<div style="text-align:center">DHN: 21/21 breathing - Block: <span id="block">14</span></div>
-<div style="text-align:center;color:#0ff" id="status">☁️ CLOUD9 MATE 8001 LIVE - PID 4049</div>
+<div style="text-align:center">Block: <span id="block">14</span> | DHN: <span id="dhn">21/21</span> <span class="dot"></span></div>
+<div style="text-align:center;color:#0ff" id="status">Box: 1/2/4/9 LIVE</div>
 </div>
 <div class="card">
-<h3>🎮 Box Game 1/2/4/9 - CLOUD9 MATE</h3>
+<h3 style="margin:5px">🎮 Box Game 1/2/4/9 - CLOUD9 MATE</h3>
 <button class="btn" onclick="play(1)">1 BOX<br>10%</button>
 <button class="btn" onclick="play(2)">2 BOX<br>20%</button>
 <button class="btn" onclick="play(4)">4 BOX<br>40%</button>
 <button class="btn" onclick="play(9)">9 BOX<br>90%</button>
-<div id="game" style="text-align:center;margin-top:10px;color:#ff0"></div>
+<div id="game" style="text-align:center;margin-top:8px;color:#ff0;min-height:20px"></div>
 </div>
 <div class="card">
-<h3>🧠 Genie Brain - DHN Chain</h3>
-<div id="dhn">21 humans breathing - No breath=No block</div>
-<div>Body: DeSoM | Soul: 21 humans | Heart: 21M FANEN | Blood: Fanii | Brain: Genie</div>
+<h3 style="margin:5px">🧠 Genie Brain - LIVE FEED</h3>
+<div style="font-size:11px">Body: DeSoM | Soul: 21 humans | Heart: 21M FANEN | Blood: Fanii | Brain: Genie</div>
 </div>
 <div class="card">
-<h3>📦 Live Blocks</h3>
-<div class="log" id="log">[Block 14] DHN breathing 21/21 - Supply 20999997.2 - Box Game LIVE
-Waiting for new blocks...</div>
+<h3 style="margin:5px">📦 Live Blocks - WebSocket</h3>
+<div class="log" id="log">Waiting for CLOUD9 MATE 8001...</div>
 </div>
 <script>
-let b=14,s=20999997.2;
-setInterval(()=>{
- b++; s-=0.2;
- document.getElementById('block').textContent=b;
- document.getElementById('supply').textContent=s.toFixed(1);
- let l=document.getElementById('log');
- l.innerHTML+=`<br>[Block ${b}] DHN breathing 21/21 - Supply ${s.toFixed(1)} - Box Game LIVE`;
- l.scrollTop=l.scrollHeight;
-},3000);
+let ws, b=14, s=20999997.2;
+function connect(){
+  ws = new WebSocket('ws://'+location.hostname+':8001');
+  ws.onopen = ()=>{document.getElementById('ws').innerHTML='✅ WS CONNECTED CLOUD9 MATE 8001 - REAL-TIME!';};
+  ws.onmessage = (e)=>{
+    let d=JSON.parse(e.data);
+    if(d.type==='block'||d.type==='init'){
+      b=d.block; s=d.supply;
+      document.getElementById('block').textContent=b;
+      document.getElementById('supply').textContent=s;
+      document.getElementById('dhn').textContent=d.dhn||'21/21';
+      let l=document.getElementById('log');
+      l.innerHTML = d.msg + '<br>' + l.innerHTML;
+    }
+  };
+  ws.onclose = ()=>{document.getElementById('ws').innerHTML='❌ WS Disconnected - Reconnecting...'; setTimeout(connect,2000);};
+  ws.onerror = ()=>{document.getElementById('ws').innerHTML='❌ WS Error - Check Termux';};
+}
+connect();
 function play(n){
  let win=Math.random()<0.5;
- document.getElementById('game').innerHTML = n+" BOX "+(win?"💥 WIN +"+n*10+" FANEN!":"❌ LOSE - Try again! DHN still breathing!");
+ document.getElementById('game').innerHTML = n+" BOX "+(win?"💥 WIN +"+n*10+" FANEN!":"❌ LOSE - DHN breathing...")+"<br><small>Block "+b+" | Supply "+s+"</small>";
+ if(ws && ws.readyState===1) ws.send(JSON.stringify({action:"play",box:n,win:win}));
 }
-setInterval(()=>{fetch('cloud9.log').then(r=>r.text()).then(t=>{if(t)document.getElementById('log').innerText=t.slice(-1000)}).catch(()=>{})},3000);
 </script>
 </body></html>
