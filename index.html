@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fountain Wallet - DeSoM V13.4</title>
+<style>
+body{background:#000;color:#0f0;font-family:monospace;padding:15px}
+h1{color:#0ff;text-align:center}
+.card{background:#111;border:1px solid #0f0;border-radius:12px;padding:15px;margin:10px 0}
+.btn{background:#0f0;color:#000;border:none;padding:12px 20px;border-radius:8px;font-weight:bold;margin:5px;width:22%;font-size:16px}
+.supply{font-size:24px;color:#ff0;text-align:center}
+.log{height:200px;overflow:auto;background:#000;border:1px solid #333;padding:10px;font-size:12px}
+</style></head><body>
+<h1>💧 Fountain Wallet<br>DeSoM V13.4 LIVE</h1>
+<div class="card">
+<div class="supply">Supply: <span id="supply">20999997.2</span> FANEN</div>
+<div style="text-align:center">DHN: 21/21 breathing - Block: <span id="block">14</span></div>
+<div style="text-align:center;color:#0ff" id="status">☁️ CLOUD9 MATE 8001 LIVE - PID 4049</div>
+</div>
+<div class="card">
+<h3>🎮 Box Game 1/2/4/9 - CLOUD9 MATE</h3>
+<button class="btn" onclick="play(1)">1 BOX<br>10%</button>
+<button class="btn" onclick="play(2)">2 BOX<br>20%</button>
+<button class="btn" onclick="play(4)">4 BOX<br>40%</button>
+<button class="btn" onclick="play(9)">9 BOX<br>90%</button>
+<div id="game" style="text-align:center;margin-top:10px;color:#ff0"></div>
+</div>
+<div class="card">
+<h3>🧠 Genie Brain - DHN Chain</h3>
+<div id="dhn">21 humans breathing - No breath=No block</div>
+<div>Body: DeSoM | Soul: 21 humans | Heart: 21M FANEN | Blood: Fanii | Brain: Genie</div>
+</div>
+<div class="card">
+<h3>📦 Live Blocks</h3>
+<div class="log" id="log">[Block 14] DHN breathing 21/21 - Supply 20999997.2 - Box Game LIVE
+Waiting for new blocks...</div>
+</div>
+<script>
+let b=14,s=20999997.2;
+setInterval(()=>{
+ b++; s-=0.2;
+ document.getElementById('block').textContent=b;
+ document.getElementById('supply').textContent=s.toFixed(1);
+ let l=document.getElementById('log');
+ l.innerHTML+=`<br>[Block ${b}] DHN breathing 21/21 - Supply ${s.toFixed(1)} - Box Game LIVE`;
+ l.scrollTop=l.scrollHeight;
+},3000);
+function play(n){
+ let win=Math.random()<0.5;
+ document.getElementById('game').innerHTML = n+" BOX "+(win?"💥 WIN +"+n*10+" FANEN!":"❌ LOSE - Try again! DHN still breathing!");
+}
+setInterval(()=>{fetch('cloud9.log').then(r=>r.text()).then(t=>{if(t)document.getElementById('log').innerText=t.slice(-1000)}).catch(()=>{})},3000);
+</script>
+</body></html>
