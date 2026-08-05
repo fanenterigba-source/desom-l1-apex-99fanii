@@ -1,22 +1,29 @@
 <!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FANEN Faucet</title>
+<title>FANEN Faucet - Block 354</title>
 <style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;text-align:center}
-input{padding:10px;width:80%;background:#000;color:#ff0;border:1px solid #ff0;border-radius:8px;margin:10px}
-button{background:#ff0;color:#000;padding:12px 20px;border:none;border-radius:10px;font-weight:bold;font-size:16px}
+input{padding:12px;width:85%;background:#111;color:#ff0;border:1px solid #ff0;border-radius:10px;margin:10px;font-size:15px}
+button{background:#ff0;color:#000;padding:14px 24px;border:none;border-radius:12px;font-weight:bold;font-size:17px;box-shadow:0 0 10px #ff0}
+.card{background:#111;border:1px solid #333;border-radius:10px;padding:10px;margin:10px}
 </style></head><body>
-<h1>🚰 FANEN COIN Faucet</h1>
-<p>Claim 100 FANEN COIN L1 - COIN NOT TOKEN</p>
-<input id="addr" placeholder="Your name / address (e.g. Chidi)">
-<br><button onclick="claim()">💧 CLAIM 100 FANEN COIN</button>
-<div id="msg" style="margin:15px;color:#ff0"></div>
+<h1 style="color:#ff0">FANEN COIN Faucet</h1>
+<p>Claim 100 FANEN COIN L1 - COIN NOT TOKEN - L1_NATIVE</p>
+<input id="addr" placeholder="Your name (e.g. Chidi)">
+<br><button onclick="claim()">CLAIM 100 FANEN COIN</button>
+<div id="msg" style="margin:15px;color:#0ff">Connecting to chain...</div>
+<div class="card" id="log" style="font-size:11px;height:120px;overflow:auto;text-align:left"></div>
 <script>
 let ws=new WebSocket('ws://'+location.hostname+':8001');
-ws.onopen=()=>document.getElementById('msg').innerHTML='✅ Faucet connected to Block 156';
+ws.onopen=()=>document.getElementById('msg').innerHTML='CONNECTED Block 354 - 24 holders - Ready to claim';
+ws.onmessage=e=>{
+ let d=JSON.parse(e.data);
+ let l=document.getElementById('log');
+ if(d.msg) l.innerHTML=d.msg+'<br>'+l.innerHTML;
+};
 function claim(){
  let to=document.getElementById('addr').value.trim();
  if(!to)return alert('Enter name');
  ws.send(JSON.stringify({action:"transfer",from:"Founder",to:to,amount:100}));
- document.getElementById('msg').innerHTML='💸 Sending 100 FANEN COIN to '+to+'... Check explorer!';
+ document.getElementById('msg').innerHTML='SENT 100 FANEN COIN to '+to+'! Check explorer!';
 }
 </script>
 </body></html>
