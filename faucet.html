@@ -9,8 +9,8 @@ h1{color:#ff0;text-shadow:0 0 10px #ff0}
 <h1>FANEN COIN FAUCET</h1>
 <h3 style="color:#0ff">L1_NATIVE_COIN - NOT TOKEN - Block <span id="h">-</span></h3>
 <p>Supply: <span id="s">-</span> | Holders: <span id="ho">-</span></p>
-<input id="addr" placeholder="Enter your name to claim 100 FANEN">
-<br><button onclick="claim()">CLAIM 100 FANEN COIN WORLDWIDE</button>
+<input id="addr" placeholder="Enter your name to claim 50 FANEN">
+<br><button onclick="claim()">CLAIM 50 FANEN COIN WORLDWIDE</button>
 <div id="msg" style="margin:15px;color:#0ff;font-size:16px">Connecting to world chain...</div>
 <div class="card" id="log">Loading...</div>
 <script>
@@ -28,11 +28,11 @@ async function loadLedger(){
 async function claim(){
   let to=document.getElementById('addr').value.trim();
   if(!to)return alert('Enter name');
-  document.getElementById('msg').textContent='Claiming 100 FANEN for '+to+'...';
+  document.getElementById('msg').textContent='Claiming 50 FANEN for '+to+'...';
   try{
     let r=await fetch('/api/claim?to='+encodeURIComponent(to));
     let j=await r.json();
-    if(j.ok){document.getElementById('msg').innerHTML='SUCCESS! Sent 100 FANEN to '+to+' at Block '+j.block+'!'; loadLedger();}
+    if(j.ok){document.getElementById('msg').innerHTML='SUCCESS! Sent 50 FANEN to '+to+' at Block '+j.block+'!'; loadLedger();}
     else{document.getElementById('msg').textContent='Already claimed: '+JSON.stringify(j)}
   }catch(e){document.getElementById('msg').textContent='Claim failed: '+e}
 }

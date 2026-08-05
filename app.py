@@ -10,7 +10,7 @@ def load_ledger():
     if os.path.exists(LEDGER):
         with open(LEDGER) as f:
             return json.load(f)
-    return {"height": 407, "balances": {"Founder": 20998984.98, "Fa Nen Ter": 1000, "Chidi": 100}, "supply": 20999984.98}
+    return {"height": 407, "balances": {"Founder": 20998984.98, "Fa Nen Ter": 500, "Chidi": 50}, "supply": 20999984.98}
 
 def save_ledger(l):
     with open(LEDGER, "w") as f:
@@ -29,16 +29,16 @@ class Handler(SimpleHTTPRequestHandler):
             if to in bal:
                 self.send_response(200); self.send_header("Content-type","application/json"); self.send_header("Access-Control-Allow-Origin","*"); self.end_headers()
                 self.wfile.write(json.dumps({"error":"already claimed","balance":bal[to]}).encode()); return
-            if bal.get("Founder",0) < 100:
+            if bal.get("Founder",0) < 50:
                 self.send_response(400); self.end_headers(); return
-            bal["Founder"] -= 100
-            bal[to] = bal.get(to,0)+100
+            bal["Founder"] -= 50
+            bal[to] = bal.get(to,0)+50
             ledger["height"] = ledger.get("height",407)+1
             ledger["balances"] = bal
             save_ledger(ledger)
             self.send_response(200); self.send_header("Content-type","application/json"); self.send_header("Access-Control-Allow-Origin","*"); self.end_headers()
-            self.wfile.write(json.dumps({"ok": True, "to": to, "amount": 100, "block": ledger["height"], "holders": len(bal)}).encode())
-            print(f"[Block {ledger['height']}] Founder -> {to} 100 FANEN - {len(bal)} holders")
+            self.wfile.write(json.dumps({"ok": True, "to": to, "amount": 50, "block": ledger["height"], "holders": len(bal)}).encode())
+            print(f"[Block {ledger['height']}] Founder -> {to} 50 FANEN - {len(bal)} holders")
             return
         if parsed.path == "/api/ledger":
             self.send_response(200); self.send_header("Content-type","application/json"); self.send_header("Access-Control-Allow-Origin","*"); self.end_headers()
