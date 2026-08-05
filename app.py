@@ -1,3 +1,18 @@
+FAUCET_AMOUNT=7
+FAUCET_CAP=18000
+FAUCET_TOTAL_FILE="faucet_total.txt"
+
+def get_total():
+    try:
+        return float(open(FAUCET_TOTAL_FILE).read() or 0)
+    except:
+        return 0
+def add_total(a):
+    t=get_total()+a
+    open(FAUCET_TOTAL_FILE,'w').write(str(t))
+    return t
+
+
 import os, json
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
@@ -32,12 +47,18 @@ class Handler(SimpleHTTPRequestHandler):
             if bal.get("Founder",0) < 50:
                 self.send_response(400); self.end_headers(); return
             bal["Founder"] -= 50
-            bal[to] = bal.get(to,0)+50
+            # CAP CHECK 18,000
+    total = get_total()
+    if total + 7 > FAUCET_CAP:
+        self.wfile.write(json.dumps({"ok": False, "error": f"Faucet ended! {total}/18000 given. Now MINE to earn!"}).encode())
+        return
+    bal[to] = bal.get(to,0)+7
+    add_total(7)
             ledger["height"] = ledger.get("height",407)+1
             ledger["balances"] = bal
             save_ledger(ledger)
             self.send_response(200); self.send_header("Content-type","application/json"); self.send_header("Access-Control-Allow-Origin","*"); self.end_headers()
-            self.wfile.write(json.dumps({"ok": True, "to": to, "amount": 50, "block": ledger["height"], "holders": len(bal)}).encode())
+            self.wfile.write(json.dumps({"ok": True, "to": to, "amount": 7, "block": ledger["height"], "holders": len(bal)}).encode())
             print(f"[Block {ledger['height']}] Founder -> {to} 50 FANEN - {len(bal)} holders")
             return
         if parsed.path == "/api/ledger":
