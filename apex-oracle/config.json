@@ -1,0 +1,4 @@
+{
+  "top_decentralized_coins": ["bitcoin", "ethereum", "monero", "cardano", "litecoin"],
+  "standards_to_track": ["tps", "finality_seconds", "avg_fee_usd", "github_activity"]
+}

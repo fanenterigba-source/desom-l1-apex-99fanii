@@ -1,0 +1,52 @@
+{
+  "dip_id": "DIP-20260806-0119",
+  "created_at": "2026-08-06T00:19:30.157064",
+  "reason": "Auto-upgrade to beat Top 5 decentralized L1s",
+  "targets": {
+    "tps": 275.0,
+    "finality": 540.0,
+    "fee": 0.018
+  },
+  "snapshot": [
+    {
+      "id": "bitcoin",
+      "symbol": "btc",
+      "price": 64539,
+      "tps_estimate": 7,
+      "avg_fee_estimate": 1.2,
+      "finality": 3600
+    },
+    {
+      "id": "ethereum",
+      "symbol": "eth",
+      "price": 1908.72,
+      "tps_estimate": 30,
+      "avg_fee_estimate": 0.8,
+      "finality": 900
+    },
+    {
+      "id": "cardano",
+      "symbol": "ada",
+      "price": 0.191368,
+      "tps_estimate": 250,
+      "avg_fee_estimate": 0.15,
+      "finality": 600
+    },
+    {
+      "id": "monero",
+      "symbol": "xmr",
+      "price": 366.37,
+      "tps_estimate": 4,
+      "avg_fee_estimate": 0.02,
+      "finality": 1200
+    },
+    {
+      "id": "litecoin",
+      "symbol": "ltc",
+      "price": 45.33,
+      "tps_estimate": 56,
+      "avg_fee_estimate": 0.02,
+      "finality": 1800
+    }
+  ]
+}
