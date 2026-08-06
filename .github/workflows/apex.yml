@@ -1,0 +1,23 @@
+name: DESOM APEX Oracle
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # every 6 hours forever
+  workflow_dispatch:  # you can also click Run manually
+
+jobs:
+  run-oracle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - run: python apex-oracle/main.py
+      - name: Commit DIP if DESOM needs upgrade
+        run: |
+          git config user.name "DESOM Oracle"
+          git config user.email "oracle@desom.l1"
+          git add -A
+          git diff --staged --quiet || (git commit -m "auto: oracle update $(date -u)" && git push)
