@@ -1,87 +1,14 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>₣ FANEN COIN - L1 Native - Fountain</title>
-<style>
-body{background:#000;color:#0f0;font-family:monospace;padding:10px;margin:0}
-h1{color:#ff0;text-align:center;font-size:19px;margin:6px;text-shadow:0 0 8px #ff0}
-.card{background:#111;border:1px solid #ff0;border-radius:12px;padding:10px;margin:8px 0}
-.supply{font-size:22px;color:#ff0;text-align:center;font-weight:bold}
-.coin-badge{background:#ff0;color:#000;padding:2px 8px;border-radius:12px;font-weight:bold;font-size:11px}
-.btn{background:#ff0;color:#000;border:none;padding:8px;border-radius:8px;font-weight:bold;margin:3px}
-.btn2{background:#0f0;color:#000;border:none;padding:10px;border-radius:8px;font-weight:bold;margin:3px;width:23%}
-input{width:92%;padding:8px;background:#000;color:#ff0;border:1px solid #ff0;border-radius:6px;margin:4px 0}
-.log{height:140px;overflow:auto;background:#000;border:1px solid #333;padding:6px;font-size:11px}
-#ws{color:#0ff;font-size:11px;text-align:center}
-.holder{font-size:10px;color:#0f0}
-</style></head><body>
-<h1>₣ FANEN COIN <span class="coin-badge">L1 COIN</span><br>Fountain Wallet V14 - WS LIVE</h1>
-<div id="ws">🔌 Connecting COIN L1...</div>
-<div class="card">
-<div class="supply"><span class="coin-badge">COIN</span> Supply: <span id="supply">20999988.6</span> FANEN</div>
-<div style="text-align:center">Block: <span id="block">43</span> | DHN: 21/21 <span style="color:#0f0">●</span> | <span style="color:#ff0">COIN NOT TOKEN</span></div>
-<div id="holders" class="holder" style="text-align:center;margin-top:4px">Loading holders...</div>
-</div>
-
-<div class="card" style="border-color:#ff0">
-<h3 style="margin:4px;color:#ff0">₣ Send ₣ FANEN COIN - L1 Native Transfer</h3>
-<input id="from" placeholder="From (e.g. Founder, DHN_1)" value="Founder">
-<input id="to" placeholder="To address / name">
-<input id="amt" type="number" placeholder="Amount ₣ FANEN COIN" step="0.000001">
-<button class="btn" onclick="sendCoin()" style="width:96%;background:#ff0"> SEND  ₣ FANEN COIN - L1</button>
-<div id="txmsg" style="text-align:center;color:#ff0;min-height:18px;margin-top:4px"></div>
-</div>
-
-<div class="card">
-<h3 style="margin:4px">🎮 Box Game 1/2/4/9 - Win COINS</h3>
-<button class="btn2" onclick="play(1)">1 BOX<br>10%</button>
-<button class="btn2" onclick="play(2)">2 BOX<br>20%</button>
-<button class="btn2" onclick="play(4)">4 BOX<br>40%</button>
-<button class="btn2" onclick="play(9)">9 BOX<br>90%</button>
-<div id="game" style="text-align:center;margin-top:6px;color:#ff0;min-height:18px"></div>
-</div>
-
-<div class="card">
-<h3 style="margin:4px">  L1 Blocks - ₣ FANEN COIN Ledger</h3>
-<div class="log" id="log">Waiting CLOUD9 COIN L1...</div>
-</div>
-
+<!DOCTYPE html><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>DeSoM V16 Cloud9</title>
+<style>body{margin:0;background:#000;color:#fff;font-family:system-ui;display:flex;flex-direction:column;height:100dvh;aspect-ratio:9/16;max-width:420px;margin:auto} #box{background:#111;flex:1;display:grid;place-items:center;font-size:32px;text-align:center;padding:20px} .tray{display:flex;gap:8px;overflow:auto;padding:10px;background:#0a0a0a} .gift{min-width:70px;height:70px;background:linear-gradient(45deg,gold,orange);border-radius:12px;display:grid;place-items:center;font-weight:900;color:#000;text-align:center;line-height:1.1}</style>
+<body><div id="box">Loading FANENTER...</div>
+<div class="tray"><div class="gift">A1<br>10k</div><div class="gift">001<br>8k</div><div class="gift">01<br>5k</div><div class="gift">A-F<br>319</div></div>
 <script>
-let ws,b=43,s=20999988.6,balances={};
-function connect(){
- ws=new WebSocket('ws://'+location.hostname+':8001');
- ws.onopen=()=>{document.getElementById('ws').innerHTML='✔ ₣ FANEN COIN L1 CONNECTED 8001 - NATIVE COIN LIVE!';};
- ws.onmessage=(e)=>{
-  let d=JSON.parse(e.data);
-  if(d.balances){balances=d.balances; updateHolders();}
-  if(d.block){b=d.block; s=d.supply; document.getElementById('block').textContent=b; document.getElementById('supply').textContent=s;}
-  let l=document.getElementById('log');
-  if(d.msg) l.innerHTML = d.msg + '<br>' + l.innerHTML;
-  if(d.type==='coin_tx'){ document.getElementById('txmsg').innerHTML = d.msg; l.innerHTML = '✔ '+d.msg + '<br>' + l.innerHTML; }
-  if(d.type==='error'){ document.getElementById('txmsg').innerHTML='X '+d.msg; }
- };
- ws.onclose=()=>{document.getElementById('ws').innerHTML='X COIN L1 Disconnected - Reconnect...'; setTimeout(connect,2000);};
+async function refresh(){
+ try{
+  let r=await fetch('http://127.0.0.1:8000/wallet/FANENTER'); 
+  let w=await r.json();
+  document.getElementById('box').innerHTML=`Cloud9 9:16<br>Box 1 + A1 G.O.A.T.<br><br>FANENTER<br>${w.coin} Coin = $${w.coin*10000}<br>${w.koin} Koin<br><br>TGT308141<br>TARGETED A1 LIVE<br>banner:x5_views`;
+ }catch(e){document.getElementById('box').innerHTML='Cloud9 9:16<br>Box 1<br>Starting node...<br>Run desom_node.py on 8000'}
 }
-connect();
-function updateHolders(){
- let h=document.getElementById('holders');
- let txt=Object.entries(balances).slice(0,6).map(([k,v])=>k+':'+v).join(' | ');
- h.textContent = txt + '... '+Object.keys(balances).length+' holders';
-}
-function sendCoin(){
- let f=document.getElementById('from').value.trim();
- let t=document.getElementById('to').value.trim();
- let a=document.getElementById('amt').value.trim();
- if(!t||!a) {document.getElementById('txmsg').innerHTML='X Enter to + amount'; return;}
- ws.send(JSON.stringify({action:"transfer",from:f,to:t,amount:a}));
- document.getElementById('txmsg').innerHTML='⏳ Sending '+a+' ₣ FANEN COIN '+f+' -> '+t+'...';
-}
-function play(n){
- let win=Math.random()<0.5;
- document.getElementById('game').innerHTML=n+' BOX '+(win?'💥 WIN +'+n*10+' ₣ FANEN COIN!':'X LOSE')+'<br>Block '+b;
- if(win && ws.readyState===1){
-   let f=document.getElementById('from').value||'Founder';
-   ws.send(JSON.stringify({action:"transfer",from:"Fountain",to:f,amount:n*10}));
- }
-}
+setInterval(refresh,2000); refresh();
 </script>
-</body></html>
