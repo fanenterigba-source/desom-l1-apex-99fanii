@@ -5,3 +5,5 @@ fanii.db
 *.zip
 *.db
 *.zip
+__pycache__/
+*.pyc
